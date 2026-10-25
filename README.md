@@ -2,7 +2,7 @@
 
 A reproducible Nextflow (DSL2) pipeline for paired-end whole-genome sequencing (WGS) data. It trims reads, aligns them to a reference genome, checks each sample's coverage, and jointly calls SNPs on the samples that pass.
 
-The pipeline was tested on Northeastern University's **Explorer** cluster (SLURM) with a small simulated dataset.
+The pipeline runs locally or on an HPC cluster, and was tested on Northeastern University's **Explorer** cluster (SLURM) with a small simulated dataset.
 
 ## Overview
 
@@ -70,7 +70,7 @@ nextflow_wgs_variant_calling/
 
 ## How to run
 
-**On a SLURM cluster (e.g. Explorer):**
+Run on a SLURM cluster (e.g. Explorer):
 
 ```bash
 git clone https://github.com/timondm0704/nextflow_wgs_variant_calling.git
@@ -79,12 +79,6 @@ sbatch scripts/run_pipeline.sbatch
 ```
 
 The batch script requests 2 CPUs, 4 GB and 1 hour, loads Nextflow and Anaconda, and runs `nextflow run main.nf -profile conda -resume`. Module names and the partition are specific to Explorer.
-
-**Locally (requires Nextflow and conda):**
-
-```bash
-nextflow run main.nf -profile conda
-```
 
 **Options:**
 
