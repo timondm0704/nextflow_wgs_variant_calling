@@ -2,7 +2,7 @@
 
 A reproducible Nextflow (DSL2) pipeline for paired-end whole-genome sequencing (WGS) data. It trims reads, aligns them to a reference genome, checks each sample's coverage, and jointly calls SNPs on the samples that pass.
 
-The pipeline runs locally or on an HPC cluster, and was tested on Northeastern University's **Explorer** cluster (SLURM) with a small simulated dataset.
+The pipeline was tested on Northeastern University's **Explorer** cluster (SLURM) with a small simulated dataset.
 
 ## Overview
 
