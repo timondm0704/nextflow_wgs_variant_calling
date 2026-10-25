@@ -3,7 +3,7 @@
 
 params.samplesheet = "${projectDir}/data/samplesheet.csv"
 params.reference   = "${projectDir}/data/reference/SHH_locus_hg38.fa"
-params.min_depth   = 12
+params.min_coverage   = 12
 params.outdir      = "results"
 
 
@@ -78,9 +78,9 @@ process COVERAGE {
 
     script:
     """
-    DEPTH=\$(samtools coverage ${bam} | awk 'NR == 2 { print \$7 }')
-    STATUS=\$(awk -v d=\$DEPTH -v m=${params.min_depth} 'BEGIN { print (d >= m ? "PASS" : "FAIL") }')
-    echo "${id} mean_depth=\$DEPTH \$STATUS" > ${id}.coverage.txt
+    COV=\$(samtools coverage ${bam} | awk 'NR == 2 { print \$7 }')
+    STATUS=\$(awk -v d=\$COV -v m=${params.min_coverage} 'BEGIN { print (d >= m ? "PASS" : "FAIL") }')
+    echo "${id} mean_coverage=\$COV \$STATUS" > ${id}.coverage.txt
     """
 }
 
