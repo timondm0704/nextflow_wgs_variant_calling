@@ -1,0 +1,9 @@
+name: toy-wgs
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - cutadapt
+  - bwa
+  - samtools
+  - bcftools
