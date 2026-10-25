@@ -134,6 +134,12 @@ The batch script requests 2 CPUs, 4 GB and 1 hour, loads Nextflow and Anaconda, 
 - The low-coverage sample was correctly excluded from variant calling. (Samples were simulated at 15x; trimming lowers this to about 14.4x.)
 - **40 SNPs** were called across the 7 passing samples, compared with **39 true SNPs** in the simulated data.
 
+To view the first VCF records:
+
+```bash
+zcat results/variants/cohort.vcf.gz | grep -v '^##' | head -5
+```
+
 Example VCF record:
 
 ```
@@ -142,6 +148,16 @@ SHH_locus  506  C    G    643.762  ...  1/1:255,45,0:0,15  0/1:195,0,119:5,10
 ```
 
 At position 506, `S1_ind2` is homozygous for G (`1/1`, 15 reads with G) and `S4_ind1` is heterozygous (`0/1`, 5 reads with C and 10 with G).
+
+How to read a VCF record:
+
+- `POS`: position on the reference
+- `REF` / `ALT`: the reference letter and the alternate letter
+- `QUAL`: confidence that the variant is real (higher is better)
+- Each sample column, e.g. `0/1:195,0,119:5,10`, has three parts:
+  - `GT` (genotype): `0/0` = two reference copies, `0/1` = one of each, `1/1` = two alternate copies
+  - `PL`: likelihoods of 0/0, 0/1 and 1/1 (0 = most likely)
+  - `AD`: number of reads supporting the reference and alternate letter
 
 ## Design choices
 
@@ -158,5 +174,3 @@ At position 506, `S1_ind2` is homozygous for G (`1/1`, 15 reads with G) and `S4_
 - Read QC reports (FastQC/fastp + MultiQC)
 - An automatic accuracy check against the truth set
 - A SLURM profile so each step runs as its own cluster job
-
-**Author:** Mao Ding · [Portfolio](https://timondm0704.github.io)
