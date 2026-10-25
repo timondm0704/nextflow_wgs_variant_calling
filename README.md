@@ -18,17 +18,7 @@ Build a pipeline that takes raw sequencing reads from multiple individuals to a 
 
 ## Pipeline
 
-```mermaid
-flowchart LR
-    S["samplesheet.csv"] --> T["TRIM<br/>cutadapt"]
-    R["Reference FASTA"] --> I["INDEX<br/>bwa, samtools"]
-    T --> A["ALIGN<br/>bwa mem, samtools"]
-    I --> A
-    A --> C["COVERAGE<br/>samtools coverage"]
-    C -->|"≥ 12x: PASS"| V["CALL_VARIANTS<br/>bcftools"]
-    C -->|"< 12x: FAIL"| X["excluded"]
-    V --> O["cohort.vcf.gz"]
-```
+![Pipeline overview](assets/images/nextflow_wgs_pipeline.svg)
 
 ## Pipeline steps
 
@@ -174,3 +164,5 @@ How to read a VCF record:
 - Read QC reports (FastQC/fastp + MultiQC)
 - An automatic accuracy check against the truth set
 - A SLURM profile so each step runs as its own cluster job
+
+**Author:** Mao Ding · [Portfolio](https://timondm0704.github.io)
