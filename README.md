@@ -1,16 +1,20 @@
 # nextflow_wgs_variant_calling
 
-A reproducible Nextflow (DSL2) pipeline for paired-end whole-genome sequencing (WGS) data. It trims reads, aligns them to a reference genome, checks each sample's coverage, and jointly calls SNPs on the samples that pass.
+A reproducible Nextflow (DSL2) pipeline for paired-end whole-genome sequencing (WGS) data, tested on Northeastern University's **Explorer** cluster (SLURM).
 
-The pipeline runs locally or on an HPC cluster, and was tested on Northeastern University's **Explorer** cluster (SLURM) with a small simulated dataset.
+## Background
 
-## Overview
+This project started as an exercise in BINF 6310 (Northeastern University), where I wrote single-step Nextflow scripts for read trimming with cutadapt and alignment with Bowtie2. I extended it into a multi-step WGS pipeline with a sample sheet, paired-end reads, BWA-MEM alignment, a coverage check, joint variant calling, and simulated data with a known truth set.
+
+## Objective
+
+Build a pipeline that takes raw sequencing reads from multiple individuals to a multi-sample VCF of SNPs, with every sample processed the same way:
 
 - **Sample sheet input:** each sample is one row with its FASTQ files and metadata (site, latitude, longitude, depth, date). Adding samples means adding rows, not changing code.
 - **Same processing for every sample:** identical trimming, alignment and quality checks.
 - **Coverage check before genotyping:** samples below 12x mean coverage are excluded, because low coverage can miss one of the two alleles at heterozygous sites (*heterozygote dropout*).
 - **Joint variant calling:** SNPs are called across all passing samples together, producing one VCF.
-- **Portable:** the same code runs on a laptop or a SLURM cluster, with tools installed automatically by conda.
+- **Reproducible and portable:** tools are installed automatically by conda, and the pipeline runs as a SLURM job on an HPC cluster.
 
 ## Pipeline
 
@@ -26,27 +30,54 @@ flowchart LR
     V --> O["cohort.vcf.gz"]
 ```
 
-| Step | Tool | What it does | Input | Output |
-|---|---|---|---|---|
-| **TRIM** | cutadapt | Trims 3′ bases below Q20 and drops read pairs shorter than 50 bp | `data/reads/<sample>_R1/R2.fastq.gz` | Trimmed FASTQ (intermediate) |
-| **INDEX** | bwa index, samtools faidx | Indexes the reference (runs once) | `data/reference/SHH_locus_hg38.fa` | Reference index (intermediate) |
-| **ALIGN** | bwa mem, samtools sort/index | Aligns read pairs, adds a read group (sample name), sorts and indexes | Trimmed FASTQ + reference index | `results/bam/<sample>.bam` + `.bai` |
-| **COVERAGE** | samtools coverage | Calculates mean coverage; PASS if ≥ 12x | BAM | `results/coverage/<sample>.coverage.txt` |
-| **CALL_VARIANTS** | bcftools mpileup, call | Calls SNPs jointly across passing samples | BAMs of PASS samples + reference | `results/variants/cohort.vcf.gz` |
+## Pipeline steps
 
-Nextflow runs each step as soon as its inputs are ready, so samples are processed in parallel.
+File names use `<sample>` for each individual (e.g. `S1_ind1`). Nextflow runs each step as soon as its inputs are ready, so samples are processed in parallel.
+
+### 1. TRIM
+
+- **Tool:** cutadapt
+- **What it does:** trims low-quality bases (below Q20) from the 3′ end of each read and drops read pairs where either read becomes shorter than 50 bp. R1 and R2 are trimmed together so pairs stay matched.
+- **Input:** `data/reads/<sample>_R1.fastq.gz`, `data/reads/<sample>_R2.fastq.gz`
+- **Output:** `<sample>_R1.trimmed.fastq.gz`, `<sample>_R2.trimmed.fastq.gz` (intermediate, kept in `work/`)
+
+### 2. INDEX
+
+- **Tool:** bwa index, samtools faidx
+- **What it does:** builds the search index BWA needs for alignment and the position index bcftools needs for variant calling. Runs once, shared by all samples.
+- **Input:** `data/reference/SHH_locus_hg38.fa`
+- **Output:** `ref/` folder with `genome.fa` and its index files (intermediate, kept in `work/`)
+
+### 3. ALIGN
+
+- **Tool:** bwa mem, samtools sort, samtools index
+- **What it does:** aligns each read pair to the reference, labels reads with the sample name (read group), sorts them by position, and indexes the result.
+- **Input:** trimmed FASTQ files from TRIM + reference index from INDEX
+- **Output:** `results/bam/<sample>.bam`, `results/bam/<sample>.bam.bai`
+
+### 4. COVERAGE
+
+- **Tool:** samtools coverage
+- **What it does:** calculates the mean coverage (average number of reads covering each base) and marks the sample PASS if it is at least 12x, or FAIL if not. Only PASS samples continue.
+- **Input:** `results/bam/<sample>.bam` + `.bai`
+- **Output:** `results/coverage/<sample>.coverage.txt` (e.g. `S1_ind1 mean_coverage=14.4544 PASS`)
+
+### 5. CALL_VARIANTS
+
+- **Tool:** bcftools mpileup, bcftools call
+- **What it does:** looks at all passing samples together and calls SNPs, recording each sample's genotype (0/0, 0/1 or 1/1).
+- **Input:** BAM + BAI files of all PASS samples + reference from INDEX
+- **Output:** `results/variants/cohort.vcf.gz`
 
 ## Test data
 
 All sequencing data are simulated with `scripts/simulate_data.py` (fixed random seed, fully reproducible).
 
-| Component | Description |
-|---|---|
-| Reference | Human *SHH* region from hg38, chr7:155,799,980–155,812,463 (12,484 bp), used as a compact test sequence |
-| Samples | 8 diploid individuals, 2 from each of 4 sites (S1–S4) |
-| Reads | Paired-end 2 × 100 bp, 0.2% sequencing errors, some low-quality read ends |
-| Coverage | 15x for 7 samples; **6x for `S4_ind2`**, to test the coverage check |
-| Truth set | `data/truth/truth_variants.vcf`: 39 true SNPs with every sample's genotype |
+- **Reference:** human *SHH* region from hg38, chr7:155,799,980–155,812,463 (12,484 bp), used as a compact test sequence
+- **Samples:** 8 diploid individuals, 2 from each of 4 sites (S1–S4)
+- **Reads:** paired-end 2 × 100 bp, 0.2% sequencing errors, some low-quality read ends
+- **Coverage:** 15x for 7 samples; **6x for `S4_ind2`**, to test the coverage check
+- **Truth set:** `data/truth/truth_variants.vcf`, with 39 true SNPs and every sample's genotype
 
 ## Folder structure
 
@@ -82,12 +113,10 @@ The batch script requests 2 CPUs, 4 GB and 1 hour, loads Nextflow and Anaconda, 
 
 **Options:**
 
-| Parameter | Default | Description |
-|---|---|---|
-| `--samplesheet` | `data/samplesheet.csv` | Sample sheet |
-| `--reference` | `data/reference/SHH_locus_hg38.fa` | Reference genome |
-| `--min_coverage` | `12` | Minimum mean coverage to PASS |
-| `--outdir` | `results` | Output folder |
+- `--samplesheet`: sample sheet (default `data/samplesheet.csv`)
+- `--reference`: reference genome (default `data/reference/SHH_locus_hg38.fa`)
+- `--min_coverage`: minimum mean coverage to PASS (default `12`)
+- `--outdir`: output folder (default `results`)
 
 ## Results
 
@@ -129,9 +158,5 @@ At position 506, `S1_ind2` is homozygous for G (`1/1`, 15 reads with G) and `S4_
 - Read QC reports (FastQC/fastp + MultiQC)
 - An automatic accuracy check against the truth set
 - A SLURM profile so each step runs as its own cluster job
-
-## Background
-
-This project started as an exercise in BINF 6310 (Northeastern University), where I wrote single-step Nextflow scripts for trimming with cutadapt and alignment with Bowtie2. I extended it into a multi-step WGS pipeline with a sample sheet, paired-end reads, BWA-MEM alignment, a coverage check, joint variant calling, and simulated data with a known truth set.
 
 **Author:** Mao Ding · [Portfolio](https://timondm0704.github.io)
