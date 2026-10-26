@@ -61,7 +61,7 @@ File names use `<sample>` for each individual (e.g. `S1_ind1`). Nextflow runs ea
 
 ## Test data
 
-All sequencing data are simulated with `scripts/simulate_data.py` (fixed random seed, fully reproducible).
+All sequencing data are simulated with `scripts/simulate_data.py`.
 
 - **Reference:** human *SHH* region from hg38, chr7:155,799,980–155,812,463 (12,484 bp), used as a compact test sequence
 - **Samples:** 8 diploid individuals, 2 from each of 4 sites (S1–S4)
