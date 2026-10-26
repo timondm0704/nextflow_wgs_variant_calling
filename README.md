@@ -164,5 +164,3 @@ How to read a VCF record:
 - Read QC reports (FastQC/fastp + MultiQC)
 - An automatic accuracy check against the truth set
 - A SLURM profile so each step runs as its own cluster job
-
-**Author:** Mao Ding · [Portfolio](https://timondm0704.github.io)
