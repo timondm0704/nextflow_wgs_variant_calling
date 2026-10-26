@@ -18,7 +18,7 @@ Build a pipeline that takes raw sequencing reads from multiple individuals to a 
 
 ## Pipeline
 
-![Pipeline overview](images/nextflow_wgs_pipeline.svg)
+![Pipeline overview](https://timondm0704.github.io/images/nextflow_wgs_pipeline.svg)
 
 ## Pipeline steps
 
