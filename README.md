@@ -1,6 +1,6 @@
 # Whole Genome Sequencing Variant Calling Pipeline with Nextflow
 
-A reproducible Nextflow (DSL2) pipeline for paired-end whole-genome sequencing (WGS) data, tested on Northeastern University's Explorer cluster (SLURM).
+A Nextflow pipeline for paired-end whole-genome sequencing (WGS) data, tested on Northeastern University's Explorer cluster (SLURM).
 
 ## Background
 
