@@ -1,9 +1,9 @@
-name: nextflow_wgs_variant_calling
-channels:
-  - conda-forge
-  - bioconda
-dependencies:
-  - cutadapt
-  - bwa
-  - samtools
-  - bcftools
+name: nextflow_wgs_variant_calling    # a label for the environment
+channels:                             # where conda looks for software
+  - conda-forge                       #   general scientific packages and their dependencies
+  - bioconda                          #   bioinformatics tools
+dependencies:                         # the tools to install
+  - cutadapt                          #   Step 1: TRIM
+  - bwa                               #   Steps 2–3: INDEX, ALIGN
+  - samtools                          #   Steps 2–4: INDEX, ALIGN, COVERAGE
+  - bcftools                          #   Step 5: CALL_VARIANTS
