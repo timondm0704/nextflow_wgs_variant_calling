@@ -1,4 +1,4 @@
-name: toy-wgs
+name: nextflow_wgs_variant_calling
 channels:
   - conda-forge
   - bioconda
