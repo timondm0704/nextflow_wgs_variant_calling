@@ -10,7 +10,7 @@ This project started as an exercise in BINF 6310 (Northeastern University), wher
 
 Build a pipeline that takes raw sequencing reads from multiple individuals to a multi-sample VCF of SNPs, with every sample processed the same way:
 
-- **Sample sheet input:** each sample is one row with its FASTQ files and metadata (site, latitude, longitude, depth, date). Adding samples means adding rows, not changing code.
+
 - **Same processing for every sample:** identical trimming, alignment and quality checks.
 - **Coverage check before genotyping:** samples below 12x mean coverage are excluded, because low coverage can miss one of the two alleles at heterozygous sites (*heterozygote dropout*).
 - **Joint variant calling:** SNPs are called across all passing samples together, producing one VCF.
@@ -26,6 +26,7 @@ Build a pipeline that takes raw sequencing reads from multiple individuals to a 
 All sequencing data are simulated with `scripts/simulate_data.py`.
 
 - **Reference:** human *SHH* region from hg38, chr7:155,799,980–155,812,463 (12,484 bp), used as a compact test sequence
+- **Sample sheet input:** each sample is one row with its FASTQ files and metadata (site, latitude, longitude, depth, date). 
 - **Samples:** 8 samples, 2 from each of 4 sites (S1–S4)
 - **Reads:** paired-end 2 × 100 bp, 0.2% sequencing errors, some low-quality read ends
 - **Coverage:** 15x for 7 samples; **6x for `S4_ind2`**, to test the coverage check
