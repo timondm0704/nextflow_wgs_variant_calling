@@ -24,6 +24,16 @@ Build a pipeline that takes raw sequencing reads from multiple individuals to a 
 
 File names use `<sample>` for each individual (e.g. `S1_ind1`). Nextflow runs each step as soon as its inputs are ready, so samples are processed in parallel.
 
+## Test data
+
+All sequencing data are simulated with `scripts/simulate_data.py`.
+
+- **Reference:** human *SHH* region from hg38, chr7:155,799,980–155,812,463 (12,484 bp), used as a compact test sequence
+- **Samples:** 8 diploid individuals, 2 from each of 4 sites (S1–S4)
+- **Reads:** paired-end 2 × 100 bp, 0.2% sequencing errors, some low-quality read ends
+- **Coverage:** 15x for 7 samples; **6x for `S4_ind2`**, to test the coverage check
+- **Truth set:** `data/truth/truth_variants.vcf`, with 39 true SNPs and every sample's genotype
+
 ### 1. TRIM
 
 - **Tool:** cutadapt
@@ -59,15 +69,6 @@ File names use `<sample>` for each individual (e.g. `S1_ind1`). Nextflow runs ea
 - **Input:** BAM + BAI files of all PASS samples + reference from INDEX
 - **Output:** `results/variants/cohort.vcf.gz`
 
-## Test data
-
-All sequencing data are simulated with `scripts/simulate_data.py`.
-
-- **Reference:** human *SHH* region from hg38, chr7:155,799,980–155,812,463 (12,484 bp), used as a compact test sequence
-- **Samples:** 8 diploid individuals, 2 from each of 4 sites (S1–S4)
-- **Reads:** paired-end 2 × 100 bp, 0.2% sequencing errors, some low-quality read ends
-- **Coverage:** 15x for 7 samples; **6x for `S4_ind2`**, to test the coverage check
-- **Truth set:** `data/truth/truth_variants.vcf`, with 39 true SNPs and every sample's genotype
 
 ## Folder structure
 
