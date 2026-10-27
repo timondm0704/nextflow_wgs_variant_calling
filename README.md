@@ -142,10 +142,10 @@ How to read a VCF record:
 - `POS`: position on the reference
 - `REF` / `ALT`: the reference letter and the alternate letter
 - `QUAL`: confidence that the variant is real (higher is better)
-- Each sample column, e.g. `0/1:195,0,119:5,10`, has three parts:
-  - `GT` (genotype): `0/0` = two reference copies, `0/1` = one of each, `1/1` = two alternate copies
-  - `PL`: likelihoods of 0/0, 0/1 and 1/1 (0 = most likely)
-  - `AD`: number of reads supporting the reference and alternate letter
+- Each sample column, e.g. `0/1:195,0,119:5,10`, has three parts separated by colons:
+  - `GT` (genotype): the final call. `0/0` = two reference copies, `0/1` = one of each, `1/1` = two alternate copies
+  - `PL` (likelihood scores): scores for 0/0, 0/1 and 1/1, in that order. The lowest score (0) is the most likely genotype
+  - `AD` (allele depth): number of reads showing the reference letter, then the alternate letter
 
 ## Design choices
 
