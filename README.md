@@ -4,7 +4,7 @@ A Nextflow pipeline for paired-end whole-genome sequencing (WGS) data, tested on
 
 ## Background
 
-This project started as an exercise in BINF 6310 (Northeastern University), where I wrote single-step Nextflow scripts for read trimming with cutadapt and alignment with Bowtie2. I extended it into a multi-step WGS pipeline with a sample sheet, paired-end reads, BWA-MEM alignment, a coverage check, joint variant calling, and simulated data with a known truth set.
+This project started as an exercise in BINF 6310 (Northeastern University), where I wrote single-step Nextflow scripts for read trimming with cutadapt and alignment with Bowtie2. I extended it into a multi-step WGS pipeline with a sample sheet, paired-end reads, BWA-MEM alignment, a coverage check, joint variant calling, and multi-sample vcf file.
 
 ## Objective
 
