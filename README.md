@@ -20,11 +20,8 @@ Build a pipeline that takes raw sequencing reads from multiple individuals to a 
 
 ![Pipeline overview](https://timondm0704.github.io/images/nextflow_wgs_pipeline.svg)
 
-## Pipeline steps
 
-File names use `<sample>` for each individual (e.g. `S1_ind1`). Nextflow runs each step as soon as its inputs are ready, so samples are processed in parallel.
-
-## Test data
+### Test data
 
 All sequencing data are simulated with `scripts/simulate_data.py`.
 
