@@ -132,11 +132,11 @@ zcat results/variants/cohort.vcf.gz | grep -v '^##' | head -5
 Example VCF record:
 
 ```
-#CHROM     POS  REF  ALT  QUAL     ...  S1_ind2            S4_ind1
-SHH_locus  506  C    G    643.762  ...  1/1:255,45,0:0,15  0/1:195,0,119:5,10
+#CHROM     POS  REF  ALT  QUAL     INFO (excerpt)     S1_ind2            S4_ind1
+SHH_locus  506  C    G    643.762  DP=114;AC=5;AN=14  1/1:255,45,0:0,15  0/1:195,0,119:5,10
 ```
 
-At position 506, `S1_ind2` is homozygous for G (`1/1`, 15 reads with G) and `S4_ind1` is heterozygous (`0/1`, 5 reads with C and 10 with G).
+At position 506, the reference has C and some samples have G. `S1_ind2` has two copies of G (`1/1`, all 15 reads show G), and `S4_ind1` is heterozygous (`0/1`, 5 reads with C and 10 with G). Across the 7 passing samples, 5 of 14 allele copies are G (`AC=5`, `AN=14`).
 
 How to read a VCF record:
 
