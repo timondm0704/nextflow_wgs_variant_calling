@@ -93,7 +93,6 @@ nextflow_wgs_variant_calling/
 Run on a SLURM cluster (e.g. Explorer):
 
 ```bash
-git clone https://github.com/timondm0704/nextflow_wgs_variant_calling.git
 cd nextflow_wgs_variant_calling
 sbatch scripts/run_pipeline.sbatch
 ```
