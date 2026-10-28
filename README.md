@@ -140,18 +140,18 @@ How to read a VCF record:
   - `AD` (allele depth): number of reads showing the reference letter, then the alternate letter
 
 
-## Limitations and future work
+## Pipeline steps and future work
 
-This pipeline was developed and tested on simulated data, so it omits several steps that real sequencing data would need. With these additions, the full workflow would be:
+This pipeline was developed and tested on simulated data. Checked steps are implemented; unchecked steps are planned additions needed for real sequencing data.
 
-raw reads → FastQC → trimming (existing) and contaminant removal → alignment (existing) → duplicate marking → coverage check (existing) → variant calling (existing) → variant quality filtering → MultiQC
-
-Planned additions, in workflow order:
-
-- **Add read QC (before alignment):** Run FastQC on raw reads to catch sequencing problems (low base quality, GC bias, overrepresented sequences) early.
-- **Configure adapter trimming for real data (before alignment):** The existing trimming step has only been tested on simulated reads, which contain no adapters. Real data needs the library's adapter sequences supplied so they don't cause misalignments.
-- **Add contaminant removal (before alignment):** Screen out reads that don't come from the target organism, such as sequencing control spike-ins or DNA from bacteria, lab handling, or other samples, so they don't produce false alignments or variants.
-- **Add duplicate marking (after alignment, before variant calling):** Flag PCR duplicates so they don't inflate the evidence supporting a genotype call.
-- **Add variant quality filtering (after variant calling):** Extend the current QUAL filter with depth, strand bias, and mapping-quality filters.
-- **Add a MultiQC report (final step):** Aggregate QC outputs from all steps into a single summary across samples.
-- **Add a SLURM profile (execution setting):** Submit each step as its own cluster job instead of running everything on one machine.
+- [ ] **Read QC (before alignment):** Run FastQC on raw reads to catch sequencing problems (low base quality, GC bias, overrepresented sequences) early.
+- [x] **Read trimming (before alignment):** Trim reads with cutadapt. This has only been tested on simulated reads, which contain no adapters, so real data will need the library's adapter sequences supplied.
+- [ ] **Contaminant removal (before alignment):** Screen out reads that don't come from the target organism, such as sequencing control spike-ins or DNA from bacteria, lab handling, or other samples, so they don't produce false alignments or variants.
+- [x] **Reference indexing:** Index the reference with BWA and SAMtools for alignment and variant calling.
+- [x] **Alignment:** Align paired-end reads with BWA-MEM and write sorted, indexed BAMs.
+- [ ] **Duplicate marking (after alignment, before variant calling):** Flag PCR duplicates so they don't inflate the evidence supporting a genotype call.
+- [x] **Coverage check:** Calculate mean coverage per individual with samtools coverage and exclude individuals below 12x.
+- [x] **Variant calling:** Call SNPs jointly with bcftools on individuals that pass the coverage check, keeping variants with QUAL ≥ 30.
+- [ ] **Extended variant filtering (after variant calling):** Add depth, strand bias, and mapping-quality filters on top of the current QUAL filter.
+- [ ] **MultiQC report (final step):** Aggregate QC outputs from all steps into a single summary across samples.
+- [ ] **SLURM profile (execution setting):** Submit each step as its own cluster job instead of running the whole pipeline inside one batch job.
