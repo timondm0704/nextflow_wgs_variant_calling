@@ -97,14 +97,6 @@ cd nextflow_wgs_variant_calling
 sbatch scripts/run_pipeline.sbatch
 ```
 
-The batch script requests 2 CPUs, 4 GB and 1 hour, loads Nextflow and Anaconda, and runs `nextflow run main.nf -profile conda -resume`. Module names and the partition are specific to Explorer.
-
-**Options:**
-
-- `--samplesheet`: sample sheet (default `data/samplesheet.csv`)
-- `--reference`: reference genome (default `data/reference/SHH_locus_hg38.fa`)
-- `--min_coverage`: minimum mean coverage to PASS (default `12`)
-- `--outdir`: output folder (default `results`)
 
 ## Results
 
