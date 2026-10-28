@@ -139,14 +139,6 @@ How to read a VCF record:
   - `PL` (likelihood scores): scores for 0/0, 0/1 and 1/1, in that order. The lowest score (0) is the most likely genotype
   - `AD` (allele depth): number of reads showing the reference letter, then the alternate letter
 
-## Design choices
-
-- **Nextflow:** parallel execution, `-resume` after failures, isolated work directories, and the same code locally or on SLURM.
-- **BWA-MEM:** a standard aligner for WGS variant calling.
-- **12x coverage threshold:** below this, heterozygous genotypes become unreliable.
-- **Joint calling with bcftools:** one VCF with consistent sites across all samples.
-- **conda environment file:** records and installs the required software for reproducible runs.
-
 ## Next steps
 
 - Variant quality filtering (e.g. `bcftools view -i 'QUAL>=30'`)
