@@ -139,10 +139,14 @@ How to read a VCF record:
   - `PL` (likelihood scores): scores for 0/0, 0/1 and 1/1, in that order. The lowest score (0) is the most likely genotype
   - `AD` (allele depth): number of reads showing the reference letter, then the alternate letter
 
-## Next steps
 
-- Variant quality filtering (e.g. `bcftools view -i 'QUAL>=30'`)
-- Duplicate marking (`samtools markdup` or Picard)
-- Read QC reports (FastQC/fastp + MultiQC)
-- An automatic accuracy check against the truth set
-- A SLURM profile so each step runs as its own cluster job
+## Limitations and future work
+
+This pipeline was developed and tested on simulated data, so it omits several steps that real sequencing data would need. Planned additions include:
+
+- **Add read QC:** Run FastQC and MultiQC to catch sequencing problems (low base quality, GC bias, overrepresented sequences) early.
+- **Add adapter trimming:** Remove adapter sequences so they don't cause misalignments.
+- **Add duplicate marking:** Flag PCR duplicates so they don't inflate the evidence supporting a genotype call.
+- **Add contaminant removal:** Filter out spike-ins such as PhiX.
+- **Add variant quality filtering:** Filter called variants by quality metrics.
+- **Add a SLURM profile:** Submit each step as its own cluster job.
