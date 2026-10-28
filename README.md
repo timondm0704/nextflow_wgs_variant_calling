@@ -142,7 +142,7 @@ How to read a VCF record:
 
 ## Pipeline steps and future work
 
-This pipeline was developed and tested on simulated data. Checked steps are implemented; unchecked steps are planned additions needed for real sequencing data.
+This pipeline was developed and tested on simulated data. Checked steps are implemented, unchecked steps are planned additions needed for real sequencing data.
 
 - [ ] **Read QC (before alignment):** Run FastQC on raw reads to catch sequencing problems (low base quality, GC bias, overrepresented sequences) early.
 - [x] **Read trimming (before alignment):** Trim reads with cutadapt. This has only been tested on simulated reads, which contain no adapters, so real data will need the library's adapter sequences supplied.
