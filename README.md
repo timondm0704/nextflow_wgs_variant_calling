@@ -150,7 +150,7 @@ Planned additions, in workflow order:
 
 - **Add read QC (before alignment):** Run FastQC on raw reads to catch sequencing problems (low base quality, GC bias, overrepresented sequences) early.
 - **Configure adapter trimming for real data (before alignment):** The existing trimming step has only been tested on simulated reads, which contain no adapters. Real data needs the library's adapter sequences supplied so they don't cause misalignments.
-- **Add contaminant removal (before alignment):** Filter out spike-in reads such as PhiX so they don't produce false alignments or variants.
+- **Add contaminant removal (before alignment):** Screen out reads that don't come from the target organism, such as sequencing control spike-ins or DNA from bacteria, lab handling, or other samples, so they don't produce false alignments or variants.
 - **Add duplicate marking (after alignment, before variant calling):** Flag PCR duplicates so they don't inflate the evidence supporting a genotype call.
 - **Add variant quality filtering (after variant calling):** Extend the current QUAL filter with depth, strand bias, and mapping-quality filters.
 - **Add a MultiQC report (final step):** Aggregate QC outputs from all steps into a single summary across samples.
