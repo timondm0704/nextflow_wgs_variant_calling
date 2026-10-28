@@ -144,14 +144,14 @@ How to read a VCF record:
 
 This pipeline was developed and tested on simulated data. Checked steps are implemented, unchecked steps are planned additions needed for real sequencing data.
 
-- [ ] **Read QC (before alignment):** Run FastQC on raw reads to catch sequencing problems (low base quality, GC bias, overrepresented sequences) early.
-- [x] **Read trimming (before alignment):** Trim reads with cutadapt. This has only been tested on simulated reads, which contain no adapters, so real data will need the library's adapter sequences supplied.
-- [ ] **Contaminant removal (before alignment):** Screen out reads that don't come from the target organism, such as sequencing control spike-ins or DNA from bacteria, lab handling, or other samples, so they don't produce false alignments or variants.
+- [ ] **Read QC:** Run FastQC on raw reads to catch sequencing problems (low base quality, GC bias, overrepresented sequences) early.
+- [x] **Read trimming:** Trim reads with cutadapt. This has only been tested on simulated reads, which contain no adapters, so real data will need the library's adapter sequences supplied.
+- [ ] **Contaminant removal:** Screen out reads that don't come from the target organism, such as sequencing control spike-ins or DNA from bacteria, lab handling, or other samples, so they don't produce false alignments or variants.
 - [x] **Reference indexing:** Index the reference with BWA and SAMtools for alignment and variant calling.
 - [x] **Alignment:** Align paired-end reads with BWA-MEM and write sorted, indexed BAMs.
-- [ ] **Duplicate marking (after alignment, before variant calling):** Flag PCR duplicates so they don't inflate the evidence supporting a genotype call.
+- [ ] **Duplicate marking:** Flag PCR duplicates so they don't inflate the evidence supporting a genotype call.
 - [x] **Coverage check:** Calculate mean coverage per individual with samtools coverage and exclude individuals below 12x.
 - [x] **Variant calling:** Call SNPs jointly with bcftools on individuals that pass the coverage check, keeping variants with QUAL ≥ 30.
-- [ ] **Extended variant filtering (after variant calling):** Add depth, strand bias, and mapping-quality filters on top of the current QUAL filter.
-- [ ] **MultiQC report (final step):** Aggregate QC outputs from all steps into a single summary across samples.
+- [ ] **Extended variant filtering:** Add depth, strand bias, and mapping-quality filters on top of the current QUAL filter.
+- [ ] **MultiQC report:** Aggregate QC outputs from all steps into a single summary across samples.
 - [ ] **SLURM profile (execution setting):** Submit each step as its own cluster job instead of running the whole pipeline inside one batch job.
