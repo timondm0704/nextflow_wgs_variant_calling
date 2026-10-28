@@ -142,11 +142,16 @@ How to read a VCF record:
 
 ## Limitations and future work
 
-This pipeline was developed and tested on simulated data, so it omits several steps that real sequencing data would need. Planned additions include:
+This pipeline was developed and tested on simulated data, so it omits several steps that real sequencing data would need. With these additions, the full workflow would be:
 
-- **Add read QC:** Run FastQC and MultiQC to catch sequencing problems (low base quality, GC bias, overrepresented sequences) early.
-- **Add adapter trimming:** Remove adapter sequences so they don't cause misalignments.
-- **Add duplicate marking:** Flag PCR duplicates so they don't inflate the evidence supporting a genotype call.
-- **Add contaminant removal:** Filter out spike-ins such as PhiX.
-- **Add variant quality filtering:** Filter called variants by quality metrics.
-- **Add a SLURM profile:** Submit each step as its own cluster job.
+raw reads → FastQC → adapter trimming and contaminant removal → alignment → duplicate marking → variant calling → variant quality filtering → MultiQC
+
+Planned additions, in workflow order:
+
+- **Add read QC (before alignment):** Run FastQC on raw reads to catch sequencing problems (low base quality, GC bias, overrepresented sequences) early.
+- **Add adapter trimming (before alignment):** Remove adapter sequences and low-quality read ends so they don't cause misalignments.
+- **Add contaminant removal (before alignment):** Filter out spike-in reads such as PhiX so they don't produce false alignments or variants.
+- **Add duplicate marking (after alignment, before variant calling):** Flag PCR duplicates so they don't inflate the evidence supporting a genotype call.
+- **Add variant quality filtering (after variant calling):** Filter called variants by quality, depth, strand bias, and mapping quality.
+- **Add a MultiQC report (final step):** Aggregate QC outputs from all steps into a single summary across samples.
+- **Add a SLURM profile (execution setting):** Submit each step as its own cluster job instead of running everything on one machine.
