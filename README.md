@@ -111,7 +111,7 @@ sbatch scripts/run_pipeline.sbatch
 | S4_ind1 | 14.44x | PASS |
 | S4_ind2 | 5.79x | **FAIL** (excluded) |
 
-- The low-coverage sample was correctly excluded from variant calling. (Samples were simulated at 15x; trimming lowers this to about 14.4x.)
+- The low-coverage sample was correctly excluded from variant calling.
 - **40 SNPs** were called across the 7 passing samples, compared with **39 true SNPs** in the simulated data.
 
 To view the first VCF records:
