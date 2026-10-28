@@ -12,4 +12,6 @@ module load anaconda3/2024.06
 
 # Submit from the project folder:  sbatch scripts/run_pipeline.sbatch
 cd $SLURM_SUBMIT_DIR
+
+# runs the main.nf pipeline with Conda environments
 nextflow run main.nf -profile conda -resume
